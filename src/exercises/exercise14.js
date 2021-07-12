@@ -19,9 +19,7 @@ fromHttpRequest('https://orels-moviedb.herokuapp.com/genres')
             )),
         toArray(),
         map(director =>
-            director.sort((a, b) => {
-                return a.year < b.year ? -1 : 1;
-            })
+            director.sort((a, b) => a.year < b.year ? 1 : -1)
         ),
         concatAll(),
         take(3)

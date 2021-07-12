@@ -10,4 +10,4 @@ fromHttpRequest('https://orels-moviedb.herokuapp.com/directors')
         filter(director =>
                 director.name.charAt(0).toLocaleLowerCase() == director.name.slice(-1))
     )
-    .subscribe(director => console.log(director));
+    .subscribe(console.log);

@@ -44,6 +44,7 @@ fromHttpRequest('https://orels-moviedb.herokuapp.com/movies')
         )),
         filter(movie => movie.genres.includes('thriller')),
         groupBy(movie => movie.year),
-        mergeMap(group => group.pipe(count(), map(movieCount => [group.key, movieCount]))),
+        mergeMap(group => group.pipe(count(),
+            map(movieCount => [group.key, movieCount]))),
         max((a, b) => a[1] < b[1] ? -1 : 1)
     ).subscribe(console.log);

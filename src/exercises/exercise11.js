@@ -1,4 +1,4 @@
-const {mergeAll} = require("rxjs/operators");
+const {take} = require("rxjs/operators");
 const {filter} = require("rxjs/operators");
 const {toArray} = require("rxjs/operators");
 const {map} = require("rxjs/operators");
@@ -9,9 +9,9 @@ const {of} = require("rxjs");
 const {fromHttpRequest} = require('../utils/http');
 
 fromHttpRequest('https://orels-moviedb.herokuapp.com/ratings')
-    .pipe
-    (
+    .pipe(
         mergeMap(array => array),
+        take(100),
         groupBy(
             rating => rating.movie,
             r => r.score
@@ -21,12 +21,7 @@ fromHttpRequest('https://orels-moviedb.herokuapp.com/ratings')
         filter(rating => (rating[1] * 100) / rating[2] >= 70),
         mergeMap(rating => fromHttpRequest(`https://orels-moviedb.herokuapp.com/movies/${rating[0]}`)
             .pipe(
-                mergeAll(),
-                map(movie => {
-                    return {
-                        title: movie.title
-                    }
-                })
+                map(movie => [movie.title, (rating[1] * 100) / rating[2]])
             )
         )
     )
